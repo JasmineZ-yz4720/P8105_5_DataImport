@@ -11,13 +11,61 @@ Import the `FAS_litters.csv` csv.
 litters_df = read.csv("Data/FAS_litters.csv")
 #cleanup the column names: lower cases and eliminate spaces
 litters_df = janitor::clean_names(litters_df)
-litters_df
 ```
 Import the `FAS_litters.csv` csv using the absolute path.
 ```{r}
 litters_df2 = read.csv("~/Desktop/P8105 DS I/P8105_DataImport_Lecture5/Data/FAS_litters.csv")
 litters_df2 = janitor::clean_names(litters_df2)
-litters_df2
+
+```
+Import the `FAS_pups.csv` csv.
+```{r}
+pups_df = read.csv("Data/FAS_pups.csv")
+pups_df = janitor::clean_names(pups_df)
+head(pups_df)
 ```
 
+# Looking at Data
+```{r}
+head(litters_df)
+str(litters_df)
+skimr::skim(litters_df)
+```
+# Options in read_*
+```{r}
+#remove NA and 19 from dataset
+litters_df3 = read.csv("Data/FAS_litters.csv", na=c("NA",19))
+```
+
+# Column types
+```{r}
+litters_df4 = read_csv("Data/FAS_litters.csv",
+  col_types = 
+    cols(
+      `GD0 weight`=col_character()
+  ))
+str(litters_df4)
+```
+
+# Other file types
+Import a xlsx file
+```{r}
+library(readxl)
+mlb11_df = read_excel("Data/mlb11.xlsx", n_max = 20)
+head(mlb11_df, 5)
+```
+Import a SAS file
+```{r}
+library(haven)
+pulse_data = read_sas("./Data/public_pulse_data.sas7bdat")
+head(pulse_data, 5)
+```
+
+## Export Data
+```{r}
+litters_df_cleaned = read_csv("Data/FAS_litters.csv")
+litters_df_cleaned = janitor::clean_names(litters_df_cleaned)
+
+write_csv(litters_df_cleaned, "Data/litters_df_cleaned.csv")
+```
 
