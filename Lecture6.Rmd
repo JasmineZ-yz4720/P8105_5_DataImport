@@ -27,3 +27,44 @@ select(litters_data, litter_number, pups_survive, everything())
 relocate(litters_data, litter_number, pups_survive)
 ```
 
+# Filter: rows
+```{r}
+filter(litters_data, gd_of_birth == 20)
+filter(litters_data, pups_survive != 4)
+#keep 2 groups
+filter(litters_data, group %in% c("Con7", "Con8"))
+filter(litters_data, group == "Con7" & group == "Con8")
+#2 conditions
+filter(litters_data, group == "Con7" & gd_of_birth == 20)
+
+#missing values
+drop_na(litters_data) #remove all rows with missing value
+drop_na(litters_data, gd0_weight)
+```
+
+# Mutate: change or add column variable
+```{r}
+mutate(litters_data,
+  wt_gain = gd18_weight - gd0_weight, #new column
+  group = str_to_lower(group) #make all to lower case
+)
+```
+# Arrange
+```{r}
+arrange(litters_data, group, gd0_weight)
+```
+
+# Pipe: command+shift+M
+```{r}
+litters_data = 
+  read_csv("./data/FAS_litters.csv")|>
+  janitor::clean_names() |> 
+  select(-pups_survive) |> 
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) |> 
+  drop_na(wt_gain) |> 
+  arrange(group, wt_gain)
+litters_data
+```
+
