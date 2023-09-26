@@ -5,6 +5,25 @@ date: "2023-09-26"
 ---
 
 ```{r setup}
-
+library(tidyverse)
 ```
+
+```{r}
+pulse_df = 
+  haven::read_sas("./Data/public_pulse_data.sas7bdat") |>
+  janitor::clean_names() |> #bdi is on different columns
+  pivot_longer( #wide format to long format
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit", 
+    #get rid of name
+    names_prefix = "bdi_score_",
+    values_to = "bdi_score"
+  ) |> 
+  mutate(
+    #check the visit variable and replace every bl to 00m
+    visit = replace(visit, visit == "bl","00m")
+  )
+pulse_df
+```
+
 
